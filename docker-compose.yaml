@@ -1,0 +1,87 @@
+services:
+  gateway:
+    build:
+      context: ./VinPinGateway
+      dockerfile: Dockerfile
+    container_name: vin-pin-gateway
+    ports:
+      - "80:80"
+    depends_on:
+      - db
+    networks:
+      - vin-pin-network
+
+  main:
+    build:
+      context: ./VinPinMain
+      dockerfile: Dockerfile
+    container_name: vin-pin-main
+    ports:
+      - "8080"
+    depends_on:
+      - db
+      - gateway
+    networks:
+      - vin-pin-network
+  db:
+    build:
+      context: ./Database
+      dockerfile: Dockerfile
+    container_name: vin-pin-db
+    ports:
+      - "5432:5432"
+    volumes:
+      - vin_pin_data:/var/lib/postgresql/data
+    networks:
+      - vin-pin-network
+
+  grafana:
+    build:
+      context: ./VinPinGrafana
+      dockerfile: Dockerfile
+    container_name: vin-pin-grafana
+    ports:
+      - "3000"
+    volumes:
+      - vinpin_grafana_data:/var/lib/grafana
+    depends_on:
+      - db
+    networks:
+      - vin-pin-network
+  front:
+    build:
+      context: ./VinPinFront
+      dockerfile: Dockerfile
+    container_name: vin-pin-front
+    ports:
+      - "5173"
+    depends_on:
+      - db
+    networks:
+      - vin-pin-network
+  ml:
+    build:
+      context: ./VinPinML
+      dockerfile: Dockerfile
+    container_name: vin-pin-ml
+    volumes:
+      - vinpin_python_data:/usr/local/packages
+    ports:
+      - "5000"
+    depends_on:
+      - db
+    networks:
+      - vin-pin-network
+
+volumes:
+  vin_pin_data:
+    name: vin_pin_data
+    external: true
+  vinpin_grafana_data:
+    name: vinpin_grafana_data
+    external: true
+  vinpin_python_data:
+
+networks:
+  vin-pin-network:
+    driver: bridge

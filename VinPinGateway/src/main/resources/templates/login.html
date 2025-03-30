@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Вход в систему</title>
+  <link rel="stylesheet" href="static/styles.css">
+</head>
+<body>
+<div class="login-page">
+  <div class="container">
+    <div class="header">
+      <img src="static/vinpin-white-logo.svg" alt="Logo" class="logo">
+    </div>
+    <div class="login-container">
+      <h2>Вход в систему</h2>
+
+      <form action="/login" method="POST">
+        <div class="form-item">
+          <input
+                  type="text"
+                  name="username"
+                  placeholder="Логин"
+                  class="input-field"
+                  required
+          />
+        </div>
+
+        <div class="form-item">
+          <input
+                  type="password"
+                  name="password"
+                  placeholder="Пароль"
+                  class="input-field"
+                  required
+          />
+        </div>
+
+        <div class="form-item">
+          <button type="submit" class="btn-primary">Войти</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- JavaScript для отображения ошибки из URL параметра -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const error = urlParams.get('error');
+
+    if (error) {
+      const errorDiv = document.createElement('div');
+      errorDiv.className = 'error-message';
+      errorDiv.textContent = decodeURIComponent(error);
+
+      const loginContainer = document.querySelector('.login-container');
+      if (loginContainer) {
+        loginContainer.insertBefore(errorDiv, loginContainer.querySelector('form'));
+      }
+    }
+  });
+</script>
+</body>
+</html>
