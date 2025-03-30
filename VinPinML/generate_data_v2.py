@@ -2,11 +2,7 @@
 import numpy as np
 import pandas as pd
 
-def generate_churn_data(num_samples=5000, seed=None):  # Исправлен порядок аргументов
-    """
-    Генерирует синтетические данные для прогнозирования оттока клиентов.
-    Учитывает только подписки, без разовых продуктов.
-    """
+def generate_churn_data(num_samples=5000, seed=None):
     np.random.seed(seed)
 
     data = {
@@ -35,15 +31,13 @@ def generate_churn_data(num_samples=5000, seed=None):  # Исправлен по
 
     return df
 
-# Генерация 1,000,000 строк (200 итераций по 5000)
 chunks = []
-for i in range(3):  # Меняем сид на каждой итерации
+for i in range(3):
     chunk = generate_churn_data(num_samples=5000, seed=i+62)
     chunks.append(chunk)
     print(f"Generated chunk {i+1}/200", end="\r")
 
 df = pd.concat(chunks, ignore_index=True)
 
-# Сохранение данных
 df.to_csv("bogdan_dataset.csv", index=False)
 print("\nData saved to million_rows_dataset.csv")
