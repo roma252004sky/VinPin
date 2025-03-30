@@ -8,7 +8,6 @@ from generate_data_v2 import generate_churn_objects
 app = Flask(__name__)
 
 
-# Загрузка модели и scaler
 class ChurnPredictor(torch.nn.Module):
     def __init__(self, input_size):
         super().__init__()
@@ -30,7 +29,6 @@ model.eval()
 
 scaler = joblib.load("scaler_no_onetime.save")
 
-# Правила для причин, рекомендаций и триггеров
 RULES = {
     "high_risk": [
         {
@@ -120,7 +118,6 @@ def predict():
     output = []
     try:
         for data in data_net:
-        # Подготовка данных
             input_data = [
                 data["days_since_last_login"],
                 data["avg_catalogs_opened"],
@@ -132,13 +129,11 @@ def predict():
                 data["days_until_sub_end"]
             ]
 
-            # Предсказание
             scaled_data = scaler.transform(np.array(input_data).reshape(1, -1))
             tensor_data = torch.FloatTensor(scaled_data)
             with torch.no_grad():
                 risk_score = model(tensor_data).item()
 
-            # Формирование ответа
             result = get_risk_details(data, risk_score)
             response = {
                 "client_id": data["client_id"],
