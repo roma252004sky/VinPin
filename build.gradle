@@ -25,6 +25,7 @@ pmd {
     ruleSets = ['java-basic','java-naming']
 }
 
+
 tasks.withType(Pmd).configureEach {
     ignoreFailures = false
 }
