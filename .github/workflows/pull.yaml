@@ -1,11 +1,4 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
-
-name: Java CI with Gradle
+name: Pull
 
 on:
   pull_request:
@@ -13,30 +6,29 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-
+  lint:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-
     steps:
     - uses: actions/checkout@v4
-    - name: Set up JDK 17
+    - name: JDK
       uses: actions/setup-java@v4
       with:
         java-version: '17'
         distribution: 'temurin'
-    - name: Setup Gradle
+    - name: Clone and cd
       uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
-
     - name: Build with Gradle Wrapper
-      run: 
+      run:
+        git config --global user.name $user_name
+        git config --global user.email $user_email
+        git remote set-url origin https://${github_token}@github.com/${repository}
         cd untilted
-
     - name: runLint
       run: 
-        cd untilted
         ./gradlew lint
-    - name: runTests
+    - name: runTest
       run:
         ./gradlew test
+  
