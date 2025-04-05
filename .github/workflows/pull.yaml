@@ -20,7 +20,7 @@ jobs:
     - name: Clone and cd
       uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
     - name: Build with Gradle Wrapper
-      run:
+      run: |
         git config --global user.name $user_name
         git config --global user.email $user_email
         git remote set-url origin https://${github_token}@github.com/${repository}
@@ -31,9 +31,9 @@ jobs:
         github_token: ${{ secrets.ACTIONS_DEPLOY_ACCESS_TOKEN }}
         repository: ${{ github.repository }}    
     - name: runLint
-      run: 
+      run: |
         ./gradlew lint
     - name: runTest
-      run:
+      run: |
         ./gradlew test
   
