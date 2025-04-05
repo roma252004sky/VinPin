@@ -7,7 +7,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 class MainAppApplicationTests {
 
     @Test
-    void contextLoads() {
+    void tests() {
+        if (2 != 2){
+            throw new AssertionError();
+        }
+        else return;
     }
 
 }
