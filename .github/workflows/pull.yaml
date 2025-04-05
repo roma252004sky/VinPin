@@ -33,8 +33,8 @@ jobs:
         repository: ${{ github.repository }}    
     - name: runLint
       run: |
-        gradlew lint
+        gradle lint
     - name: runTest
       run: |
-        gradlew test
+        gradle test
   
